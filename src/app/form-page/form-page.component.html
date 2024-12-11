@@ -1,0 +1,50 @@
+<div class="container py-5">
+  <h2 class="text-center mb-4 fw-bold">Contact Information Form</h2>
+
+  <form [formGroup]="myForm" class="form-group border p-5 rounded shadow-sm bg-light">
+    <div class="form-group mb-4">
+      <label for="name" class="form-label fw-semibold">Full Name</label>
+      <input type="text" id="name" class="form-control" formControlName="name" placeholder="Enter your full name">
+    </div>
+
+    <div class="form-group mb-4">
+      <label for="email" class="form-label fw-semibold">Email Address</label>
+      <input type="email" id="email" class="form-control" formControlName="email" placeholder="example@email.com">
+      <p *ngIf="getControl('email')?.invalid && getControl('email')?.touched" class="text-danger small mt-2">
+        Please enter a valid email address.
+      </p>
+    </div>
+
+    <div formArrayName="phones" class="form-group mb-4">
+      <label class="form-label fw-semibold">Phone Numbers</label>
+      <div class="d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-outline-primary btn-sm mb-2" (click)="addPhone()">+ Add Phone</button>
+      </div>
+
+      <div *ngFor="let item of phones.controls; let i = index" class="d-flex align-items-center mb-2">
+        <input [formControlName]="i" class="form-control me-2" placeholder="Enter phone number">
+        <button *ngIf="i > 0" type="button" class="btn btn-outline-danger btn-sm" (click)="removePhone(i)">Remove</button>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary w-100 fw-bold" (click)="save()">Save Information</button>
+  </form>
+
+  <h3 class="mt-5 fw-bold">Saved Entries</h3>
+  <ul class="list-group mt-4">
+    <li *ngFor="let form of savedForms; let i = index" class="list-group-item d-flex justify-content-between align-items-start bg-light border-0 shadow-sm mb-2 rounded">
+      <div>
+        <p class="mb-1"><strong>Name:</strong> {{ form.name }}</p>
+        <p class="mb-1"><strong>Email:</strong> {{ form.email }}</p>
+        <p class="mb-1"><strong>Phones:</strong></p>
+        <ul class="mb-0 ps-3">
+          <li *ngFor="let phone of form.phones" class="small">{{ phone }}</li>
+        </ul>
+      </div>
+      <div class="d-flex flex-column">
+        <button type="button" class="btn btn-outline-primary btn-sm mb-2" (click)="edit(i)">Edit</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" (click)="delete(i)">Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>
